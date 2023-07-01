@@ -1,0 +1,65 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Ads_detail
+{% endblock title %}
+
+
+{% block content %}
+
+
+<small> <a href="{% url 'ad_edit' ads_detail.pk %}"> Edit Ad</a> </small>
+<small> <a href="{% url 'ad_delete' ads_detail.pk %}"> Delete Ad</a> </small>
+
+<h1><b> {{ ads_detail.title}} </b></h1>
+<h4> {{ ads_detail.author}} </h4>
+<h2> {{ ads_detail.time_in|date:'M d Y' }}</h2>
+{% for cats in ads_detail.category.all %}
+    <h2> {{ cats }} </h2>
+{% endfor %}
+<hr>
+<h3><em> Текст: </em></h3>
+<h3><p align="left"> {{ ads_detail.text }} </p></h3>
+<hr>
+<h3> Изображения: </h3>
+{% if ads_detail.image %}
+  <img src="{{ ads_detail.image.url }}" alt="{{ ads_detail.image }}" style="max-width: 300px;" />
+{% endif %}
+<hr>
+<h3> Видео: </h3>
+{% if ads_detail.video %}
+  <img src="{{ ads_detail.video.url }}" alt="{{ ads_detail.video }}" style="max-width: 300px;" />
+{% endif %}
+<hr>
+<h3> Отклики на объявление: </h3>
+<div class ="section">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <!-- display comment-->
+        {% for comment in object.comment_set.all %}
+        <div class="card p-2 mb-2">
+            <div class="card-body">
+                <h5 class="card-title">{{ comment.user.username }}</h5>
+                <p class="card-text">{{ comment.time_in }}</p>
+                <p class="card-text">{{ comment.text }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>No comments yet.</p>
+        {% endfor %}
+
+        <!--display the form-->
+        <form method="POST" action="{%url 'ads_detail' pk=object.pk%}">
+              {% csrf_token %}
+              <div class="form-group">
+                {{form.text}}
+              </div>
+        <button class="btn btn-primary btn-block" type="submit">Comment</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

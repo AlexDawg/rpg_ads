@@ -1,0 +1,67 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% block title %}
+Ads
+{% endblock title %}
+
+{% block content%}
+<h1><b> Все объявления </b></h1>
+<h3> Всего объявлений: {{ ads|length }} </h3>
+<h2><b> Поиск </b></h2>
+    <form action="" method="get">
+       {{ filterset.form.as_p }}
+       <input type="submit" value="Найти" />
+    </form>
+<hr>
+    {% if ads %}
+      <table>
+        <tr>
+          <td> Заголовок </td>
+          <td> Текст </td>
+          <td> Изображения </td>
+          <td> Видео </td>
+          <td> Дата публикации </td>
+        </tr>
+        {% for ad in ads %}
+        <tr>
+          <td> <a href="{% url 'ads_detail' ad.id %}">{{ ad.title }} </a></td>
+          <td> {{ ad.text|truncatewords:15 }} </td>
+          <td>{% if ad.image %}
+            <img src="{{ ad.image.url }}" alt="{{ announcement.image }}" style="max-width: 200px;">
+          {% endif %}
+        </td>
+        <td>
+          {% if ad.video %}
+            <video controls style="max-width: 200px;">
+              <source src="{{ announcement.video.url }}" type="{{ announcement.video.content_type }}">
+            </video>
+          {% endif %} </td>
+          <td> {{ ad.time_in|date:'d M Y' }} </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% else %}
+      <h2> Нет объявлений!</h2>
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+{% endblock content%}

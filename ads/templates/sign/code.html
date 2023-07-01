@@ -1,0 +1,17 @@
+{% extends "flatpages/default.html" %}
+
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="code"> Code: </label>
+        <input class="form-control" type="text" name="code">
+        <br/>
+        <button type="submit" class="btn btn-secondary">Submit</button>
+    </div>
+</form>
+{% for message in messages %}
+  <p>{{ message }}</p>
+{% endfor %}
+{% endblock content %}

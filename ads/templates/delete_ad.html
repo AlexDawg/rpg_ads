@@ -1,0 +1,17 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+
+<h1>Удалить объявление</h1>
+<hr>
+<h3> Удалить: {{ ads.title }} </h3>
+<br/>
+<div class="container">
+  <form method="POST">
+    {% csrf_token %}
+    <strong> Вы уверены? </strong> <br/> <br/>
+    <button type="submit" class="btn btn-primary">Delete</button>
+  </form>
+</div>
+{% endblock %}
+

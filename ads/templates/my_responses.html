@@ -1,0 +1,35 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+  <h1>My Responses</h1>
+
+  <div>
+    <form method="GET">
+      <select name="ads">
+        <option value="" selected>All Ads</option>
+        {% for ad in ads %}
+          <option value="{{ ad.id }}">{{ ad.title }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Filter</button>
+    </form>
+  </div>
+
+  <ul>
+    {% for comment in comments %}
+        <li>
+          Ad: {{ comment.ads.title }}
+          <br/>
+          Comment: {{ comment.content }}
+          <form action="{% url 'delete_comment' comment.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+          </form>
+          <form action="{% url 'accept_comment' comment.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">Accept</button>
+          </form>
+        </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
